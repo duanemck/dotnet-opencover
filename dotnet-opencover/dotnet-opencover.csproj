@@ -1,17 +1,41 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<!--<Project Sdk="Microsoft.NET.Sdk">-->
+<!---->
+<!--  <PropertyGroup>-->
+<!--    <OutputType>Exe</OutputType>-->
+<!--    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>-->
+<!--    <AssemblyName>dotnet-opencover</AssemblyName>-->
+<!--    <Version>0.1.2</Version>-->
+<!--    <Authors>Daniel Miller</Authors>-->
+<!--    <Title>A cli dotnet wrapper for OpenCover (requires OpenCover dependancy)</Title>-->
+<!--    <Description>-->
+<!--      See: https://github.com/watermelonpizza/dotnet-opencover/blob/master/README.md for details.-->
+<!--    </Description>-->
+<!--    <RepositoryUrl>https://github.com/watermelonpizza/dotnet-opencover</RepositoryUrl>-->
+<!--    <PackageLicenseUrl>https://github.com/watermelonpizza/dotnet-opencover/blob/master/LICENSE</PackageLicenseUrl>-->
+<!--    <PackageTags>cli tools opencover coverage</PackageTags>-->
+<!--  </PropertyGroup>-->
+<!--</Project>-->
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFrameworks>net45;netcoreapp1.0</TargetFrameworks>
-    <AssemblyName>dotnet-opencover</AssemblyName>
-    <Version>0.1.2</Version>
-    <Authors>Daniel Miller</Authors>
-    <Title>A cli dotnet wrapper for OpenCover (requires OpenCover dependancy)</Title>
-    <Description>
-      See: https://github.com/watermelonpizza/dotnet-opencover/blob/master/README.md for details.
-    </Description>
-    <RepositoryUrl>https://github.com/watermelonpizza/dotnet-opencover</RepositoryUrl>
-    <PackageLicenseUrl>https://github.com/watermelonpizza/dotnet-opencover/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageTags>cli tools opencover coverage</PackageTags>
-  </PropertyGroup>
+<Project>
+    <Sdk Name="Microsoft.NET.Sdk" />
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <OutputType>exe</OutputType>
+        <Description>See: https://github.com/watermelonpizza/dotnet-opencover/blob/master/README.md for details.</Description>
+        <RootNamespace>dotnet_opencover</RootNamespace>
+        <PackageTags>dotnet;opencover;test</PackageTags>
+        <PackAsTool>true</PackAsTool>
+        <RuntimeFrameworkVersion>2.1.1</RuntimeFrameworkVersion>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CommandLineParser" Version="2.2.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Properties\" />
+    </ItemGroup>
+
 </Project>
