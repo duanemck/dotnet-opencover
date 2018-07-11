@@ -32,6 +32,12 @@ namespace dotnet_opencover
                             LogHeader("Generating HTML Report");
                             var reporterExe = new ReportGeneratorResolver().Resolve(null);
                             new ReportGeneratorRunner(reporterExe).GenerateReport(ResultsFile, ReportFolder);
+
+                            if (options.LaunchBrowser)
+                            {
+                                HtmlLauncher.OpenBrowser("coverage\\index.htm");
+                            }
+
                             LogFooter();
                         }                        
 

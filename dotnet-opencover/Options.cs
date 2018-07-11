@@ -14,6 +14,10 @@ namespace dotnet_opencover
         [Option("html", Required = false, Default = false, HelpText = "Generate an HTML report")]
         public bool GenerateReport { get; set; }
 
+        [Option("browser", Required = false, Default = false, HelpText = "If generating an HTML report, open in the default browser")]
+        public bool LaunchBrowser { get; set; }
+
+
         [Option("cobertura", Required = false, Default = false, HelpText = "Generate a cobertura report")]
         public bool Cobertura { get; set; }
 
