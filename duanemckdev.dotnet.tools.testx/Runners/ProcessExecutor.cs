@@ -7,7 +7,10 @@ namespace duanemckdev.dotnet.tools.testx.runners
     {
         protected virtual int RunAndWait(string exe, string args)
         {
-            Console.Out.WriteLine($"{exe} {args}");
+            Console.Out.WriteLine("Executing:");
+            Console.Out.WriteLine($"\t{exe} {args}");
+            Console.Out.WriteLine("\nNOTE: All further output will be from the process");
+            Console.Out.WriteLine("-------------------------------------------------------------");
             ProcessStartInfo psi = new ProcessStartInfo
             {
                 Arguments = args,

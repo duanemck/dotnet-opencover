@@ -30,8 +30,9 @@
         <PlatformTarget>AnyCPU</PlatformTarget>
         <AssemblyName>dotnet-testx</AssemblyName>
         <Authors>Duane McKibbin</Authors>
-        <Version>1.2.0</Version>
-        <AssemblyVersion>1.2.0.0</AssemblyVersion>
+        <Version>1.2.2</Version>
+        <AssemblyVersion>1.2.2.0</AssemblyVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup>

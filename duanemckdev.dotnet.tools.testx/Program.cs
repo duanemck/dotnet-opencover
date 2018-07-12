@@ -20,7 +20,6 @@ namespace duanemckdev.dotnet.tools.testx
         {
             try
             {
-                Console.Out.WriteLine($"@@@@@@@@@@@@@@@@@@@@@@@@@{args.Aggregate("", (a, b) => $"{a},{b}")}@@@@@@@@@@@@@@@@@@@@@@");
                 Parser.Default.ParseArguments<Options>(args)
                     .WithParsed(options =>
                     {
