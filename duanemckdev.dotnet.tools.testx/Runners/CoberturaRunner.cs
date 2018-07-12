@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace dotnet_opencover
+namespace duanemckdev.dotnet.tools.testx.runners
 {
     public class CoberturaRunner : ProcessExecutor
     {

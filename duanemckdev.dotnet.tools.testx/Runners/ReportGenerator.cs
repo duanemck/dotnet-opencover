@@ -1,4 +1,4 @@
-﻿namespace dotnet_opencover
+﻿namespace duanemckdev.dotnet.tools.testx.runners
 {
     public class ReportGeneratorRunner : ProcessExecutor
     {

@@ -3,28 +3,37 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using CommandLine;
+using duanemckdev.dotnet.tools.testx.resolvers;
+using duanemckdev.dotnet.tools.testx.runners;
 
 
-namespace dotnet_opencover
+namespace duanemckdev.dotnet.tools.testx
 {
     class Program
     {
-        private const string ResultsFile = "results.xml";
-        private const string CoberturaFile = "cobertura.xml";
-        private const string ReportFolder = "coverage";
+        private const string CoverageLocation = "coverage";
+        private static readonly string ResultsFile = $"{CoverageLocation}\\results.xml";
+        private static readonly string CoberturaFile = $"{CoverageLocation}\\cobertura.xml";
+        private static readonly string ReportFolder = $"{CoverageLocation}\\htmlreport";
 
         static int Main(string[] args)
         {
             try
             {
+                Console.Out.WriteLine($"@@@@@@@@@@@@@@@@@@@@@@@@@{args.Aggregate("", (a, b) => $"{a},{b}")}@@@@@@@@@@@@@@@@@@@@@@");
                 Parser.Default.ParseArguments<Options>(args)
                     .WithParsed(options =>
                     {
                         var openCoverExe = new OpenCoverResolver().Resolve(options.OpenCoverVersion);
                         var projectFile = MsBuildProjectFinder.FindMsBuildProject(Directory.GetCurrentDirectory(), options.Project);
 
+                        if (!Directory.Exists(CoverageLocation))
+                        {
+                            Directory.CreateDirectory(CoverageLocation);
+                        }
+
                         LogHeader($"Running tests (instrumented by OpenCover) for {projectFile}");
-                        new OpenCoverRunner(openCoverExe).Run(projectFile, "");
+                        new OpenCoverRunner(openCoverExe).Run(projectFile, options.OpenCoverFilters, ResultsFile, options.OpenCoverMerge);
                         LogFooter();
 
                         if (options.GenerateReport)
@@ -35,7 +44,7 @@ namespace dotnet_opencover
 
                             if (options.LaunchBrowser)
                             {
-                                HtmlLauncher.OpenBrowser("coverage\\index.htm");
+                                HtmlLauncher.OpenBrowser($"{ReportFolder}\\index.htm");
                             }
 
                             LogFooter();
@@ -48,6 +57,9 @@ namespace dotnet_opencover
                             new CoberturaRunner(converterExe).Run(ResultsFile, CoberturaFile);
                             LogFooter();
                         }
+
+                        LogHeader($"Coverage results in {CoverageLocation}");
+                        LogFooter();
                     });
 
             }

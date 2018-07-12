@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace dotnet_opencover
+namespace duanemckdev.dotnet.tools.testx.runners
 {
     // https://brockallen.com/2016/09/24/process-start-for-urls-on-net-core/
     public class HtmlLauncher

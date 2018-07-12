@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace dotnet_opencover
+namespace duanemckdev.dotnet.tools.testx
 {
     // https://raw.githubusercontent.com/aspnet/DotNetTools/master/src/dotnet-watch/Internal/MsBuildProjectFinder.cs
     public class MsBuildProjectFinder

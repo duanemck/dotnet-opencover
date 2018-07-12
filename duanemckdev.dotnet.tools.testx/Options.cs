@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using CommandLine;
 
-namespace dotnet_opencover
+namespace duanemckdev.dotnet.tools.testx
 {
     public class Options
     {
@@ -23,5 +23,11 @@ namespace dotnet_opencover
 
         [Option("test-results-format", Required = false, Default = "trx", HelpText = "The format to use for the VSTest test results")]
         public string TestResultsFormat { get; set; }
+
+        [Option("opencover-filters", Required = false, Default = "+[*]*", HelpText = "Filters for opencover, i.e. files to include/exclude from report")]
+        public string OpenCoverFilters { get; set; }
+
+        [Option("opencover-mergeresults", Required = false, Default = true, HelpText = "Merge multiple runs into the same results file")]
+        public bool OpenCoverMerge { get; set; }
     }
 }

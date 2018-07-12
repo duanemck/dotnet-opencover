@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace dotnet_opencover
+namespace duanemckdev.dotnet.tools.testx.resolvers
 {
     public class ReportGeneratorResolver : NugetExeResolver
     {
