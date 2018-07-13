@@ -45,25 +45,65 @@ namespace duanemckdev.dotnet.tools.testx
             return projectPath;
         }
 
-        public static IEnumerable<string> FindAllProjectsInFolder(string root, string pattern)
+        private static string DetectSolutionFile(int attemptsLeft, string folder)
         {
+            if (folder == null)
+            {
+                return null;
+            }
+            var thisFolder = new DirectoryInfo(folder);
+            var solutionFileExists = thisFolder.GetFiles("*.sln").Any();
+            if (solutionFileExists)
+            {
+                return folder;
+            }
+
+            if (attemptsLeft > 0)
+            {
+                return DetectSolutionFile(attemptsLeft - 1, thisFolder.Parent?.FullName);
+            }
+
+            return null;
+        }
+
+        public static IEnumerable<string> FindAllProjectsInFolder(string root, string pattern, bool verbose)
+        {
+            var solutionFolder = DetectSolutionFile(3, root);
+            if (solutionFolder != null)
+            {
+                root = solutionFolder;
+                if (verbose)
+                {
+                    Console.Out.WriteLine($"Working directory does not have a solution, moved up to {root}");
+                }
+            }
             var files = new List<FileInfo>();
-            TraverseAndLocateProjectFiles(files, new DirectoryInfo(root), pattern);
+            TraverseAndLocateProjectFiles(files, new DirectoryInfo(root), pattern, verbose);
             if (!files.Any())
             {
-                Console.Out.WriteLine("No projects found");
-                return new List<string>();
+                throw new Exception($"No projects found in {root}");
             }
             Console.Out.WriteLine(files.Aggregate("Found the following projects:\n", (output, file) => $"{output}\t- {file.Name}\n").Trim());
             return files.Select(f => f.FullName);
         }
 
-        private static void TraverseAndLocateProjectFiles(List<FileInfo> projectFiles, DirectoryInfo folder, string pattern)
+        private static void TraverseAndLocateProjectFiles(List<FileInfo> projectFiles, DirectoryInfo folder, string pattern, bool verbose)
         {
-            projectFiles.AddRange(folder.GetFiles(pattern));
+            if (verbose)
+            {
+                Console.Out.WriteLine($"Searching...{folder} for {pattern}");
+            }
+
+            var files = folder.GetFiles(pattern);
+            if (verbose)
+            {
+                Console.Out.WriteLine($"Found {files.Length} files matching pattern");
+            }
+
+            projectFiles.AddRange(files);
             foreach (var subFolder in folder.GetDirectories())
             {
-                TraverseAndLocateProjectFiles(projectFiles, subFolder, pattern);
+                TraverseAndLocateProjectFiles(projectFiles, subFolder, pattern, verbose);
             }
         }
     }

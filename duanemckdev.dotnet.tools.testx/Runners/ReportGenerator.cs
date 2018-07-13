@@ -4,7 +4,7 @@
     {
         private readonly string _exe;
 
-        public ReportGeneratorRunner(string exe)
+        public ReportGeneratorRunner(string exe, bool verbose) : base(verbose)
         {
             _exe = exe;
         }

@@ -17,7 +17,10 @@ namespace duanemckdev.dotnet.tools.testx
         public TestXRunner(Options options)
         {
             _options = options;
-            LogOptions();
+            if (options.Verbose)
+            {
+                LogOptions();
+            }
         }
 
         public int Run()
@@ -32,15 +35,15 @@ namespace duanemckdev.dotnet.tools.testx
                 {
                     LogHeader($"Discovering projects with pattern {_options.RunForAllProjects}");
                     var projectFiles = MsBuildProjectFinder.FindAllProjectsInFolder(Directory.GetCurrentDirectory(),
-                        _options.RunForAllProjects);
+                        _options.RunForAllProjects, _options.Verbose);
                     LogFooter();
-                    projectFiles.ForEach(file => RunForProject(file, _options));
+                    projectFiles.ForEach(RunForProject);
                 }
                 else
                 {
                     var projectFile =
                         MsBuildProjectFinder.FindMsBuildProject(Directory.GetCurrentDirectory(), _options.Project);
-                    RunForProject(projectFile, _options);
+                    RunForProject(projectFile);
                 }
 
                 GenerateReports();
@@ -91,9 +94,9 @@ namespace duanemckdev.dotnet.tools.testx
             LogFooter();
         }
 
-        private static void RunForProject(string projectFile, Options options)
+        private void RunForProject(string projectFile)
         {
-            var openCoverExe = new OpenCoverResolver().Resolve(options.OpenCoverVersion);
+            var openCoverExe = new OpenCoverResolver().Resolve(_options.OpenCoverVersion);
 
             if (!Directory.Exists(CoverageLocation))
             {
@@ -101,7 +104,7 @@ namespace duanemckdev.dotnet.tools.testx
             }
 
             LogHeader($"Running tests (instrumented by OpenCover) for {projectFile}");
-            new OpenCoverRunner(openCoverExe).Run(projectFile, options.OpenCoverFilters, ResultsFile, options.OpenCoverMerge);
+            new OpenCoverRunner(openCoverExe, _options.Verbose).Run(projectFile, _options.OpenCoverFilters, ResultsFile, _options.OpenCoverMerge);
             LogFooter();
         }
 
@@ -111,7 +114,7 @@ namespace duanemckdev.dotnet.tools.testx
             {
                 LogHeader("Generating HTML Report");
                 var reporterExe = new ReportGeneratorResolver().Resolve(null);
-                new ReportGeneratorRunner(reporterExe).GenerateReport(ResultsFile, ReportFolder);
+                new ReportGeneratorRunner(reporterExe, _options.Verbose).GenerateReport(ResultsFile, ReportFolder);
 
                 if (_options.LaunchBrowser)
                 {
@@ -125,21 +128,30 @@ namespace duanemckdev.dotnet.tools.testx
             {
                 LogHeader("Generating Cobertura Report");
                 var converterExe = new CoberturaResolver().Resolve(null);
-                new CoberturaRunner(converterExe).Run(ResultsFile, CoberturaFile);
+                new CoberturaRunner(converterExe, _options.Verbose).Run(ResultsFile, CoberturaFile);
                 LogFooter();
             }
         }
 
-        private static void LogHeader(string message)
+        private void LogHeader(string message)
         {
-            Console.Out.WriteLine("======================================================================================================================================================");
-            Console.Out.WriteLine($"\t{message}");
-            Console.Out.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------");
+            if (_options.Verbose)
+            {
+                Console.Out.WriteLine(
+                    "======================================================================================================================================================");
+                Console.Out.WriteLine($"\t{message}");
+                Console.Out.WriteLine(
+                    "------------------------------------------------------------------------------------------------------------------------------------------------------");
+            }
         }
 
-        private static void LogFooter()
+        private void LogFooter()
         {
-            Console.Out.WriteLine("======================================================================================================================================================");
+            if (_options.Verbose)
+            {
+                Console.Out.WriteLine(
+                    "======================================================================================================================================================");
+            }
         }
     }
 }

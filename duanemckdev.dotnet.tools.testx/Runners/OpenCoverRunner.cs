@@ -4,10 +4,10 @@ namespace duanemckdev.dotnet.tools.testx.runners
 {
     public class OpenCoverRunner : ProcessExecutor
     {
-        private readonly string _exe;
+        protected readonly string _exe;
         private const string dotnetExe = @"C:\Program Files\dotnet\dotnet.exe";
 
-        public OpenCoverRunner(string exe)
+        public OpenCoverRunner(string exe, bool verbose) : base(verbose)
         {
             _exe = exe;
         }
