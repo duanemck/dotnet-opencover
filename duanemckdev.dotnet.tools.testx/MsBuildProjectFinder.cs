@@ -47,7 +47,6 @@ namespace duanemckdev.dotnet.tools.testx
 
         public static IEnumerable<string> FindAllProjectsInFolder(string root, string pattern)
         {
-            Console.Out.WriteLine($"Discovering all projects ({pattern})...");
             var files = new List<FileInfo>();
             TraverseAndLocateProjectFiles(files, new DirectoryInfo(root), pattern);
             if (!files.Any())

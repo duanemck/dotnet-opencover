@@ -22,7 +22,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp2.1</TargetFramework>
         <OutputType>exe</OutputType>
-        <Description>See: https://github.com/duanemck/dotnet-opencover</Description>
+        <Description>See: https://github.com/duanemck/dotnet-testx</Description>
         <RootNamespace>duanemckdev.dotnet.tools.testx</RootNamespace>
         <PackageTags>dotnet;opencover;test;watch</PackageTags>
         <PackAsTool>true</PackAsTool>
@@ -30,10 +30,10 @@
         <PlatformTarget>AnyCPU</PlatformTarget>
         <AssemblyName>dotnet-testx</AssemblyName>
         <Authors>Duane McKibbin</Authors>
-        <Version>1.3.5</Version>
-        <AssemblyVersion>1.3.5.0</AssemblyVersion>
+        <Version>1.3.6</Version>
+        <AssemblyVersion>1.3.6.0</AssemblyVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <FileVersion>1.3.5.0</FileVersion>
+        <FileVersion>1.3.6.0</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>

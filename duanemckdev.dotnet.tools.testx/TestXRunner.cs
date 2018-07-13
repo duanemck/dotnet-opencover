@@ -24,10 +24,16 @@ namespace duanemckdev.dotnet.tools.testx
         {
             try
             {
-                if (_options.RunForAllProjects != null || _options.Project == "all")
+                if (_options.Project == "all")
                 {
+                    _options.RunForAllProjects = "*Tests.csproj";
+                }
+                if (_options.RunForAllProjects != null)
+                {
+                    LogHeader($"Discovering projects with pattern {_options.RunForAllProjects}");
                     var projectFiles = MsBuildProjectFinder.FindAllProjectsInFolder(Directory.GetCurrentDirectory(),
                         _options.RunForAllProjects);
+                    LogFooter();
                     projectFiles.ForEach(file => RunForProject(file, _options));
                 }
                 else
@@ -57,7 +63,7 @@ namespace duanemckdev.dotnet.tools.testx
 
         private void LogOptions()
         {
-            Console.Out.WriteLine("Options Passed:\n");
+            LogHeader("Options");
             if (_options.RunForAllProjects != null)
             {
                 Console.Out.WriteLine($"\t Will discover projects with pattern {_options.RunForAllProjects}");
@@ -73,12 +79,16 @@ namespace duanemckdev.dotnet.tools.testx
 
             Console.Out.WriteLine($"\t Test results format: {_options.TestResultsFormat}");
             Console.Out.WriteLine($"\t OpenCover filters: {_options.OpenCoverFilters}");
-            Console.Out.WriteLine($"\t Override OpenCover version to: {_options.OpenCoverVersion}");
+            if (_options.OpenCoverVersion != null)
+            {
+                Console.Out.WriteLine($"\t Override OpenCover version to: {_options.OpenCoverVersion}");
+            }
 
-            Console.Out.WriteLine($"\t Will {(_options.OpenCoverMerge?"":"NOT")} merge open cover reports");
-            Console.Out.WriteLine($"\t Will {(_options.Cobertura ? "" : "NOT")} generate cobertura format report");
-            Console.Out.WriteLine($"\t Will {(_options.GenerateReport ? "" : "NOT")} generate HTML report");
-            Console.Out.WriteLine($"\t Will {(_options.LaunchBrowser ? "" : "NOT")} launch browser with HTML report");
+            Console.Out.WriteLine($"\t Will{(_options.OpenCoverMerge?"":" NOT")} merge open cover reports");
+            Console.Out.WriteLine($"\t Will{(_options.Cobertura ? "" : " NOT")} generate cobertura format report");
+            Console.Out.WriteLine($"\t Will{(_options.GenerateReport ? "" : " NOT")} generate HTML report");
+            Console.Out.WriteLine($"\t Will{(_options.LaunchBrowser ? "" : " NOT")} launch browser with HTML report");
+            LogFooter();
         }
 
         private static void RunForProject(string projectFile, Options options)
@@ -93,8 +103,6 @@ namespace duanemckdev.dotnet.tools.testx
             LogHeader($"Running tests (instrumented by OpenCover) for {projectFile}");
             new OpenCoverRunner(openCoverExe).Run(projectFile, options.OpenCoverFilters, ResultsFile, options.OpenCoverMerge);
             LogFooter();
-
-
         }
 
         private  void GenerateReports()
