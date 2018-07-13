@@ -27,6 +27,7 @@ namespace duanemckdev.dotnet.tools.testx
         {
             try
             {
+                CleanupPreviousResults();
                 if (_options.Project == "all")
                 {
                     _options.RunForAllProjects = "*Tests.csproj";
@@ -64,6 +65,16 @@ namespace duanemckdev.dotnet.tools.testx
             }
         }
 
+        private void CleanupPreviousResults()
+        {
+            if (Directory.Exists(CoverageLocation))
+            {
+                Directory.Delete(CoverageLocation, true);
+                
+            }
+            Directory.CreateDirectory(CoverageLocation);
+        }
+
         private void LogOptions()
         {
             LogHeader("Options");
@@ -97,12 +108,7 @@ namespace duanemckdev.dotnet.tools.testx
         private void RunForProject(string projectFile)
         {
             var openCoverExe = new OpenCoverResolver().Resolve(_options.OpenCoverVersion);
-
-            if (!Directory.Exists(CoverageLocation))
-            {
-                Directory.CreateDirectory(CoverageLocation);
-            }
-
+            
             LogHeader($"Running tests (instrumented by OpenCover) for {projectFile}", true);
             new OpenCoverRunner(openCoverExe, _options.Verbose).Run(projectFile, _options.OpenCoverFilters, ResultsFile, _options.OpenCoverMerge);
             LogFooter();
