@@ -6,10 +6,10 @@ NOTE: Due to OpenCover being Windows only, this tool will only work on Windows
 
 ## Features
 
-1. Run `dotnet test` with code coverage tracking by OpenCover
-1. Generate cobertura covberage results (useful for VSTS/TFS coverage reporting). Uses [OpenCovertToCobeturaConverter](https://www.nuget.org/packages/OpenCoverToCoberturaConverter/)
-1. Generate an HTML coverage report using [ReportGenerator](https://www.nuget.org/packages/ReportGenerator)
-1. Discover all test projects in a folder and run tests for all of them (not natively supported by `dotnet test`)
+1.  Run `dotnet test` with code coverage tracking by OpenCover
+1.  Generate cobertura covberage results (useful for VSTS/TFS coverage reporting). Uses [OpenCovertToCobeturaConverter](https://www.nuget.org/packages/OpenCoverToCoberturaConverter/)
+1.  Generate an HTML coverage report using [ReportGenerator](https://www.nuget.org/packages/ReportGenerator)
+1.  Discover all test projects in a folder and run tests for all of them (not natively supported by `dotnet test`)
 
 _The coverage and reporting tools are not bundles into this tool. They need to be installed as dependencies on the project that you're running this on._
 
@@ -62,7 +62,6 @@ Nuget package: https://www.nuget.org/packages/dotnet-testx
   --help                      Display this help screen.
 
   --version                   Display version information.
-
 ```
 
 ## Tips
