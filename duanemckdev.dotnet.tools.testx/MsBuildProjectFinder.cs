@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -42,6 +43,29 @@ namespace duanemckdev.dotnet.tools.testx
             }
 
             return projectPath;
+        }
+
+        public static IEnumerable<string> FindAllProjectsInFolder(string root, string pattern)
+        {
+            Console.Out.WriteLine($"Discovering all projects ({pattern})...");
+            var files = new List<FileInfo>();
+            TraverseAndLocateProjectFiles(files, new DirectoryInfo(root), pattern);
+            if (!files.Any())
+            {
+                Console.Out.WriteLine("No projects found");
+                return new List<string>();
+            }
+            Console.Out.WriteLine(files.Aggregate("Found the following projects:\n", (output, file) => $"{output}\t- {file.Name}\n").Trim());
+            return files.Select(f => f.FullName);
+        }
+
+        private static void TraverseAndLocateProjectFiles(List<FileInfo> projectFiles, DirectoryInfo folder, string pattern)
+        {
+            projectFiles.AddRange(folder.GetFiles(pattern));
+            foreach (var subFolder in folder.GetDirectories())
+            {
+                TraverseAndLocateProjectFiles(projectFiles, subFolder, pattern);
+            }
         }
     }
 }
