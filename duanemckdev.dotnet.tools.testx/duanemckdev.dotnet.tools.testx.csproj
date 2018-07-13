@@ -41,10 +41,10 @@ See https://github.com/duanemck/dotnet-testx for more details</Description>
         <PlatformTarget>AnyCPU</PlatformTarget>
         <AssemblyName>dotnet-testx</AssemblyName>
         <Authors>Duane McKibbin</Authors>
-        <Version>1.4.3</Version>
-        <AssemblyVersion>1.4.3.0</AssemblyVersion>
+        <Version>1.4.4</Version>
+        <AssemblyVersion>1.4.4.0</AssemblyVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <FileVersion>1.4.3.0</FileVersion>
+        <FileVersion>1.4.4.0</FileVersion>
         <RepositoryUrl>https://github.com/duanemck/dotnet-testx</RepositoryUrl>
         <PackageProjectUrl>https://github.com/duanemck/dotnet-testx</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/duanemck/dotnet-testx/blob/master/LICENSE</PackageLicenseUrl>

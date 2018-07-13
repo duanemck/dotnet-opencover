@@ -65,11 +65,12 @@ Nuget package: https://www.nuget.org/packages/dotnet-testx
 
 ```
 
-## Tip
+## Tips
 
 In .net core 2.1 onwards, you can run this as part of dotnet watch
 
-`dotnet watch` requires it own project argument so it knows which files to watch
+`dotnet watch` requires its own project argument so it knows which files to watch
+
 Use -- to separate `dotnet watch` arguments from `dotnet testx` arguments
 
 `dotnet watch --project [project-file] testx -- [dotnet testx arguments]`

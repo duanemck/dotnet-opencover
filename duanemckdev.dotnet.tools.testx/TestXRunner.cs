@@ -103,7 +103,7 @@ namespace duanemckdev.dotnet.tools.testx
                 Directory.CreateDirectory(CoverageLocation);
             }
 
-            LogHeader($"Running tests (instrumented by OpenCover) for {projectFile}");
+            LogHeader($"Running tests (instrumented by OpenCover) for {projectFile}", true);
             new OpenCoverRunner(openCoverExe, _options.Verbose).Run(projectFile, _options.OpenCoverFilters, ResultsFile, _options.OpenCoverMerge);
             LogFooter();
         }
@@ -133,9 +133,9 @@ namespace duanemckdev.dotnet.tools.testx
             }
         }
 
-        private void LogHeader(string message)
+        private void LogHeader(string message, bool forceLog = false)
         {
-            if (_options.Verbose)
+            if (_options.Verbose || forceLog)
             {
                 Console.Out.WriteLine(
                     "======================================================================================================================================================");
