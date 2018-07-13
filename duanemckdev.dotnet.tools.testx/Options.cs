@@ -5,11 +5,16 @@ namespace duanemckdev.dotnet.tools.testx
 {
     public class Options
     {
-        [Option("opencover-version", Required = false, HelpText = "Optional OpenCover version.")]
-        public string OpenCoverVersion{ get; set; }
 
-        [Option("project", Required = false, HelpText = "Project to test.")]
+        [Option("discover-projects", Required = false, Default=null, HelpText = "Discover all files in the working directory matching the pattern and run tests on them. Alias for '--project all'")]
+        public string RunForAllProjects { get; set; }
+
+        [Option("project", Required = false, HelpText = "Project to test. * => find all projects in the folder and subfolders")]
         public string Project { get; set; }
+
+        [Option("opencover-version", Required = false, HelpText = "Optional OpenCover version.")]
+        public string OpenCoverVersion { get; set; }
+
 
         [Option("html", Required = false, Default = false, HelpText = "Generate an HTML report")]
         public bool GenerateReport { get; set; }

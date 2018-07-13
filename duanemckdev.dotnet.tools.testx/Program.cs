@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CommandLine;
@@ -23,44 +23,32 @@ namespace duanemckdev.dotnet.tools.testx
                 Parser.Default.ParseArguments<Options>(args)
                     .WithParsed(options =>
                     {
-                        var openCoverExe = new OpenCoverResolver().Resolve(options.OpenCoverVersion);
-                        var projectFile = MsBuildProjectFinder.FindMsBuildProject(Directory.GetCurrentDirectory(), options.Project);
-
-                        if (!Directory.Exists(CoverageLocation))
+                        if (options.RunForAllProjects != null || options.Project == "all")
                         {
-                            Directory.CreateDirectory(CoverageLocation);
-                        }
-
-                        LogHeader($"Running tests (instrumented by OpenCover) for {projectFile}");
-                        new OpenCoverRunner(openCoverExe).Run(projectFile, options.OpenCoverFilters, ResultsFile, options.OpenCoverMerge);
-                        LogFooter();
-
-                        if (options.GenerateReport)
-                        {
-                            LogHeader("Generating HTML Report");
-                            var reporterExe = new ReportGeneratorResolver().Resolve(null);
-                            new ReportGeneratorRunner(reporterExe).GenerateReport(ResultsFile, ReportFolder);
-
-                            if (options.LaunchBrowser)
+                            Console.Out.WriteLine($"Discovering all projects ({options.RunForAllProjects})...");
+                            var projectFiles =
+                                TraverseAndLocateProjectFiles(new DirectoryInfo(Directory.GetCurrentDirectory()), options.RunForAllProjects);
+                            if (!projectFiles.Any())
                             {
-                                HtmlLauncher.OpenBrowser($"{ReportFolder}\\index.htm");
+                                Console.Out.WriteLine("No projects found");
+                                return;
                             }
-
-                            LogFooter();
-                        }                        
-
-                        if (options.Cobertura)
-                        {
-                            LogHeader("Generating Cobertura Report");
-                            var converterExe = new CoberturaResolver().Resolve(null);
-                            new CoberturaRunner(converterExe).Run(ResultsFile, CoberturaFile);
-                            LogFooter();
+                            Console.Out.WriteLine(projectFiles.Aggregate("Found the following projects:\n", (output,file)=> $"{output}\t- {file.Name}\n").Trim());
+                            foreach (var projectFile in projectFiles)
+                            {
+                                RunForProject(projectFile.FullName, options);
+                            }
                         }
-
+                        else
+                        {
+                            var projectFile = MsBuildProjectFinder.FindMsBuildProject(Directory.GetCurrentDirectory(), options.Project);
+                            RunForProject(projectFile, options);
+                        }  
+                        
+                        GenerateReports(options);
                         LogHeader($"Coverage results in {CoverageLocation}");
                         LogFooter();
                     });
-
             }
             catch (Exception e)
             {
@@ -69,6 +57,63 @@ namespace duanemckdev.dotnet.tools.testx
             }
             return 0;
             
+        }
+
+        private static List<FileInfo> TraverseAndLocateProjectFiles(DirectoryInfo folder, string pattern)
+        {
+            var files = new List<FileInfo>();
+            TraverseAndLocateProjectFiles(files, folder, pattern);
+            return files;
+        }
+
+        private static void TraverseAndLocateProjectFiles(List<FileInfo> projectFiles, DirectoryInfo folder, string pattern)
+        {
+            projectFiles.AddRange(folder.GetFiles(pattern));
+            foreach (var subFolder in folder.GetDirectories())
+            {
+                TraverseAndLocateProjectFiles(projectFiles, subFolder, pattern);
+            }
+        }
+
+        private static void RunForProject(string projectFile, Options options)
+        {
+            var openCoverExe = new OpenCoverResolver().Resolve(options.OpenCoverVersion);
+            
+            if (!Directory.Exists(CoverageLocation))
+            {
+                Directory.CreateDirectory(CoverageLocation);
+            }
+
+            LogHeader($"Running tests (instrumented by OpenCover) for {projectFile}");
+            new OpenCoverRunner(openCoverExe).Run(projectFile, options.OpenCoverFilters, ResultsFile, options.OpenCoverMerge);
+            LogFooter();
+            
+            
+        }
+
+        private static void GenerateReports(Options options)
+        {
+            if (options.GenerateReport)
+            {
+                LogHeader("Generating HTML Report");
+                var reporterExe = new ReportGeneratorResolver().Resolve(null);
+                new ReportGeneratorRunner(reporterExe).GenerateReport(ResultsFile, ReportFolder);
+
+                if (options.LaunchBrowser)
+                {
+                    HtmlLauncher.OpenBrowser($"{ReportFolder}\\index.htm");
+                }
+
+                LogFooter();
+            }
+
+            if (options.Cobertura)
+            {
+                LogHeader("Generating Cobertura Report");
+                var converterExe = new CoberturaResolver().Resolve(null);
+                new CoberturaRunner(converterExe).Run(ResultsFile, CoberturaFile);
+                LogFooter();
+            }
         }
 
         private static void LogHeader(string message)
