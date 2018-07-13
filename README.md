@@ -23,6 +23,8 @@ The tool is installed as a global dotnet tool (.net Core 2.1+)
 
 `dotnet tool install -g dotnet-testx`
 
+Nuget package: https://www.nuget.org/packages/dotnet-testx
+
 ## Usage
 
 `dotnet testx --help`
