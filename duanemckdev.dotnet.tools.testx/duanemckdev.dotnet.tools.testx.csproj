@@ -22,7 +22,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp2.1</TargetFramework>
         <OutputType>exe</OutputType>
-        <Description>Extensions to the `dotnet test` command that enable code coverage reporting (using OpenCover) a few other bonus features. 
+        <Description>Extensions to the `dotnet test` command that enable code coverage reporting (using OpenCover) and a few other bonus features. 
 
 NOTE: Due to OpenCover being Windows only, this tool will only work on Windows
 
@@ -31,7 +31,7 @@ Features
 1. Run `dotnet test` with code coverage tracking by OpenCover
 2. Generate cobertura covberage results (useful for VSTS/TFS coverage reporting). 
 3. Generate an HTML coverage report
-4. Discover all test projects in a folder and run tests for all of them (not natively supported by `dotnet test`)
+4. Discover all test projects in a folder and run tests for all of them (not natively supported by `dotnet test`). Works nicely with `dotnet watch` for continuous testing of an entire solution
 
 See https://github.com/duanemck/dotnet-testx for more details</Description>
         <RootNamespace>duanemckdev.dotnet.tools.testx</RootNamespace>
@@ -41,10 +41,10 @@ See https://github.com/duanemck/dotnet-testx for more details</Description>
         <PlatformTarget>AnyCPU</PlatformTarget>
         <AssemblyName>dotnet-testx</AssemblyName>
         <Authors>Duane McKibbin</Authors>
-        <Version>1.4.1</Version>
-        <AssemblyVersion>1.4.1.0</AssemblyVersion>
+        <Version>1.4.3</Version>
+        <AssemblyVersion>1.4.3.0</AssemblyVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <FileVersion>1.4.1.0</FileVersion>
+        <FileVersion>1.4.3.0</FileVersion>
         <RepositoryUrl>https://github.com/duanemck/dotnet-testx</RepositoryUrl>
         <PackageProjectUrl>https://github.com/duanemck/dotnet-testx</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/duanemck/dotnet-testx/blob/master/LICENSE</PackageLicenseUrl>
