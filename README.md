@@ -56,6 +56,8 @@ Nuget package: https://www.nuget.org/packages/dotnet-testx
   --opencover-mergeresults    (Default: true) Merge multiple runs into the same
                               results file
 
+  --opencover-options         (Default: ) Any other options you'd like passed into OpenCover
+
   --verbose                   (Default: false) Log more verbose details of
                               whats happening
 
