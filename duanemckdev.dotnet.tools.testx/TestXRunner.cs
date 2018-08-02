@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using CSharpx;
 using duanemckdev.dotnet.tools.testx.resolvers;
 using duanemckdev.dotnet.tools.testx.runners;
@@ -27,6 +29,7 @@ namespace duanemckdev.dotnet.tools.testx
         {
             try
             {
+                IEnumerable<int> exitCodes = null;
                 CleanupPreviousResults();
                 if (_options.Project == "all")
                 {
@@ -38,18 +41,25 @@ namespace duanemckdev.dotnet.tools.testx
                     var projectFiles = MsBuildProjectFinder.FindAllProjectsInFolder(Directory.GetCurrentDirectory(),
                         _options.RunForAllProjects, _options.Verbose);
                     LogFooter();
-                    projectFiles.ForEach(RunForProject);
+                    exitCodes = projectFiles.Select(RunForProject);                    
                 }
                 else
                 {
                     var projectFile =
                         MsBuildProjectFinder.FindMsBuildProject(Directory.GetCurrentDirectory(), _options.Project);
-                    RunForProject(projectFile);
+                    var exitCode = RunForProject(projectFile);
+                    exitCodes = new List<int>(){exitCode};
                 }
 
                 GenerateReports();
                 LogHeader($"Coverage results in {CoverageLocation}");
                 LogFooter();
+
+                if (exitCodes.Any(code => code != 0))
+                {
+                    Console.Error.WriteLine("One or more of the test executions exited with non-zero exit code");
+                    return 1;
+                }
                 return 0;
             }
             catch (ProcessException processException)
@@ -105,13 +115,14 @@ namespace duanemckdev.dotnet.tools.testx
             LogFooter();
         }
 
-        private void RunForProject(string projectFile)
+        private int RunForProject(string projectFile)
         {
             var openCoverExe = new OpenCoverResolver().Resolve(_options.OpenCoverVersion);
             
             LogHeader($"Running tests (instrumented by OpenCover) for {projectFile}", true);
-            new OpenCoverRunner(openCoverExe, _options.Verbose).Run(projectFile, _options.OpenCoverFilters, ResultsFile, _options.OpenCoverMerge);
+            var exitCode = new OpenCoverRunner(openCoverExe, _options.Verbose).Run(projectFile, _options.OpenCoverFilters, ResultsFile, _options.OpenCoverMerge, _options.OpenCoverOptions);
             LogFooter();
+            return exitCode;
         }
 
         private  void GenerateReports()

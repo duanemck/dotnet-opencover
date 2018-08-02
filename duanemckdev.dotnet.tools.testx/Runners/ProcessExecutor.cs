@@ -30,11 +30,6 @@ namespace duanemckdev.dotnet.tools.testx.runners
             var process = Process.Start(psi);
             process?.WaitForExit();
             var exitCode = process?.ExitCode ?? 1;            
-            if (exitCode != 0)
-            {
-                throw new ProcessException(exitCode, $"{exe} exited with non-zero exit code");
-            }
-
             return exitCode;
         }
     }

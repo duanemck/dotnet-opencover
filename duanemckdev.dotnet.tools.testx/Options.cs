@@ -33,6 +33,9 @@ namespace duanemckdev.dotnet.tools.testx
         [Option("opencover-mergeresults", Required = false, Default = true, HelpText = "Merge multiple runs into the same results file")]
         public bool OpenCoverMerge { get; set; }
 
+        [Option("opencover-options", Required = false, Default = "", HelpText = "Any other options you'd like passed into OpenCover")]
+        public string OpenCoverOptions { get; set; }
+
         [Option("verbose", Required = false, Default = false, HelpText = "Log more verbose details of whats happening")]
         public bool Verbose { get; set; }
     }

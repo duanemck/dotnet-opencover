@@ -12,9 +12,9 @@ namespace duanemckdev.dotnet.tools.testx.runners
             _exe = exe;
         }
 
-        public int Run(string project, string filters, string outputFile, bool mergeOutput)
+        public int Run(string project, string filters, string outputFile, bool mergeOutput, string extraOptions)
         {
-            var coverArgs = $@"-target:""{dotnetExe}"" -targetargs:""test {project} --logger:trx"" -register:user -oldStyle -output:""{outputFile}"" -filter:""{filters}"" -hideskipped:File";
+            var coverArgs = $@"-target:""{dotnetExe}"" -targetargs:""test {project} --logger:trx"" -register:user -oldStyle -output:""{outputFile}"" -filter:""{filters}"" -hideskipped:File -returntargetcode {extraOptions}";
             if (mergeOutput)
             {
                 coverArgs += " -mergeOutput";
