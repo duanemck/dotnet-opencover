@@ -41,7 +41,7 @@ namespace duanemckdev.dotnet.tools.testx
                     var projectFiles = MsBuildProjectFinder.FindAllProjectsInFolder(Directory.GetCurrentDirectory(),
                         _options.RunForAllProjects, _options.Verbose);
                     LogFooter();
-                    exitCodes = projectFiles.Select(RunForProject);                    
+                    exitCodes = projectFiles.Select(RunForProject).ToList();                    
                 }
                 else
                 {

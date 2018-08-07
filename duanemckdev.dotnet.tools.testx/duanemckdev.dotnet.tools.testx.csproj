@@ -41,15 +41,19 @@ See https://github.com/duanemck/dotnet-testx for more details</Description>
         <PlatformTarget>AnyCPU</PlatformTarget>
         <AssemblyName>dotnet-testx</AssemblyName>
         <Authors>Duane McKibbin</Authors>
-        <Version>1.5.0</Version>
-        <AssemblyVersion>1.5.0.0</AssemblyVersion>
+        <Version>1.5.1</Version>
+        <AssemblyVersion>1.5.1.0</AssemblyVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <FileVersion>1.5.0.0</FileVersion>
+        <FileVersion>1.5.1.0</FileVersion>
         <RepositoryUrl>https://github.com/duanemck/dotnet-testx</RepositoryUrl>
         <PackageProjectUrl>https://github.com/duanemck/dotnet-testx</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/duanemck/dotnet-testx/blob/master/LICENSE</PackageLicenseUrl>
         <RepositoryType>GitHub</RepositoryType>
-        <PackageReleaseNotes>Output exit code from test tool so that it can be used within a CI pipeline to fail the build on test failure
+        <PackageReleaseNotes>1.5.0
+Fixed bug where reports were generated before tests run when using `--project all`
+
+1.5.0
+Output exit code from test tool so that it can be used within a CI pipeline to fail the build on test failure
 Added option to pass in arbitrary OpenCover options</PackageReleaseNotes>
     </PropertyGroup>
 
