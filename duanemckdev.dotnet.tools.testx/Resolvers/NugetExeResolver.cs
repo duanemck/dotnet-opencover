@@ -4,56 +4,66 @@ using System.Linq;
 
 namespace duanemckdev.dotnet.tools.testx.resolvers
 {
-    public abstract class NugetExeResolver
-    {
-        protected abstract string PackageName { get; }
-        protected abstract string ExeName { get; }
+	public abstract class NugetExeResolver
+	{
+		protected abstract string PackageName { get; }
+		protected abstract string ExeName { get; }
 
-        public string Resolve(string specificVersion)
-        {
-            var userProfile = Environment.GetEnvironmentVariable("userprofile");
+		public string Resolve(string specificVersion)
+		{
+			var userProfile = Environment.GetEnvironmentVariable("userprofile");
 
-            if (string.IsNullOrEmpty(userProfile))
-            {
-                throw new Exception($"Couldn't find userprofile folder at environment variable 'userprofile'. Used to find packages in %userprofile%/.nuget/packages/");
-            }
+			if (string.IsNullOrEmpty(userProfile))
+			{
+				throw new Exception($"Couldn't find userprofile folder at environment variable 'userprofile'. Used to find packages in %userprofile%/.nuget/packages/");
+			}
 
-            var pathToExe = Path.Combine(userProfile, ".nuget", "packages", PackageName);
+			var pathToExe = Path.Combine(userProfile, ".nuget", "packages", PackageName);
 
-            if (!Directory.Exists(pathToExe))
-            {
-                throw new Exception($"Couldn't find {PackageName} folder at {pathToExe}. Have you used dotnet restore on a project with the {PackageName} dependancy?");
-            }
+			if (!Directory.Exists(pathToExe))
+			{
+				throw new Exception($"Couldn't find {PackageName} folder at {pathToExe}. Have you used dotnet restore on a project with the {PackageName} dependancy?");
+			}
 
-            if (specificVersion != null)
-            {
-                var availableVersions = Directory.GetDirectories(pathToExe);
+			if (specificVersion != null)
+			{
+				var availableVersions = Directory.GetDirectories(pathToExe);
 
-                pathToExe = Path.Combine(pathToExe, specificVersion);
+				pathToExe = Path.Combine(pathToExe, specificVersion);
 
-                if (!Directory.Exists(pathToExe))
-                {
-                    throw new Exception($"Couldn't find the {PackageName} version at {pathToExe}. Version specified: {specificVersion}. Available: '{string.Join("', '", availableVersions)}'");
-                }
-            }
-            else
-            {
-                pathToExe = Path.Combine(pathToExe, Directory.GetDirectories(pathToExe).OrderByDescending(d => d).First());
-            }
+				if (!Directory.Exists(pathToExe))
+				{
+					throw new Exception($"Couldn't find the {PackageName} version at {pathToExe}. Version specified: {specificVersion}. Available: '{string.Join("', '", availableVersions)}'");
+				}
+			}
+			else
+			{
+				pathToExe = Path.Combine(pathToExe, Directory.GetDirectories(pathToExe).OrderByDescending(d => d).First());
+			}
 
-            // Older versions don't use the nuget tools folder system
-            if (Directory.Exists(Path.Combine(pathToExe, "tools")))
-            {
-                pathToExe = Path.Combine(pathToExe, "tools");
-            }
+			// Older versions don't use the nuget tools folder system
+			if (Directory.Exists(Path.Combine(pathToExe, "tools")))
+			{
+				pathToExe = Path.Combine(pathToExe, "tools");
+			}
 
-            pathToExe = Path.Combine(pathToExe, ExeName);
+			pathToExe = Path.Combine(pathToExe, ExeName);
 
-            if (!File.Exists(pathToExe))
-            {
-                throw new Exception($"Couldn't find {ExeName} at {pathToExe}");
-            }
-            return pathToExe;
-        }
-    }
+			if (!File.Exists(pathToExe))
+			{
+				var unknowFilePath = new FileInfo(pathToExe).Directory;
+				var foundExe = unknowFilePath.EnumerateFileSystemInfos(ExeName, SearchOption.AllDirectories).FirstOrDefault();
+
+				if (!(foundExe is null))
+				{
+					pathToExe = foundExe.FullName;
+				}
+				else
+				{
+					throw new Exception($"Couldn't find {ExeName} at {pathToExe}");
+				}
+			}
+			return pathToExe;
+		}
+	}
 }
