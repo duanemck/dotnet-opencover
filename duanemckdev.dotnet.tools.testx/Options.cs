@@ -38,5 +38,8 @@ namespace duanemckdev.dotnet.tools.testx
 
         [Option("verbose", Required = false, Default = false, HelpText = "Log more verbose details of whats happening")]
         public bool Verbose { get; set; }
-    }
+
+		[Option("working-dir", Required = false, Default = null, HelpText = "Sets the working directory of the application")]
+		public string WorkingDirectory { get; set; }
+	}
 }
