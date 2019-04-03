@@ -7,8 +7,8 @@ namespace duanemckdev.dotnet.tools.testx.runners
         protected readonly string _exe;
         private const string dotnetExe = @"C:\Program Files\dotnet\dotnet.exe";
 
-        public OpenCoverRunner(string exe, bool verbose) : base(verbose)
-        {
+        public OpenCoverRunner(string workingDirectory, string exe, bool verbose) : base(workingDirectory, verbose)
+		{
             _exe = exe;
         }
 

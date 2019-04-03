@@ -6,7 +6,7 @@ namespace duanemckdev.dotnet.tools.testx.runners
     {
         private readonly string _exe;
         
-        public CoberturaRunner(string exe, bool verbose) : base(verbose)
+        public CoberturaRunner(string workingDirectory,string exe, bool verbose) : base(workingDirectory,verbose)
         {
             _exe = exe;
         }
